@@ -1,0 +1,32 @@
+# customized main view
+set main-view = id:width=7 date:custom author \
+    commit-title:graph=yes,refs=yes
+set main-view-date-format = "%Y-%m-%d %H:%M"
+
+# customized tree view
+set tree-view = line-number:no,interval=5 mode \
+    author:full file-size:units date:custom id:no file-name
+set tree-view-date-format = "%Y-%m-%d %H:%M"
+
+# refresh mode
+set refresh-mode = auto
+
+# show merge-diff
+set diff-options = -m --first-parent
+
+# reset soft
+bind main ^ ?git reset --soft HEAD^
+
+# vim like first/last line 
+bind generic g move-first-line
+bind generic G move-last-line
+
+# reassign grep view
+bind generic <Ctrl-g> view-grep
+
+# tree view transfar
+bind tree l enter
+bind tree h parent
+
+# commit amend
+bind main + ?git commit --amend
