@@ -10,7 +10,7 @@ fi
 
 echo "move config files to ${DOTFILE_DIR} as backups."
 for f in $(cat ${PWD}/install_list.txt); do
-  if [ -e ${HOME}/.${f} ]; then
+  if [ -e ${HOME}/.${f} ] && [ ! -L ${HOME}/.${f} ]; then
     mv ${HOME}/.${f} ~/${DOTFILE_DIR}/${BACKUP_DIR}/.${f}
   fi
 done
