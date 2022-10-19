@@ -9,10 +9,21 @@ alias cp='cp -bv'
 
 alias grep='grep --color=auto'
 
-# pbcopy like MacOC
-# WSL
-#alias pbcopy='clip.exe'
+# pbcopy like Mac
+if command -v xsel &>/dev/null; then
+    alias pbcopy="xsel --clipboard --input"
+fi
 
-# tig
-alias tig='tig --all'
+# tree
+alias tree="tree -C -L 1"
+
+# jobs show pid
+alias jobs='jobs -l'
+
+# colordiff
+if command -v colordiff &>/dev/null; then
+    alias diff='colordiff -u'
+else
+    alias diff='diff -u'
+fi
 

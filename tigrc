@@ -1,32 +1,84 @@
-# customized main view
-set main-view = id:width=7 date:custom author \
-    commit-title:graph=yes,refs=yes
-set main-view-date-format = "%Y-%m-%d %H:%M"
+# main viewの左端にコミットIDを表示する
+set main-view = id date author commit-title:graph=yes,refs=yes
 
-# customized tree view
-set tree-view = line-number:no,interval=5 mode \
-    author:full file-size:units date:custom id:no file-name
-set tree-view-date-format = "%Y-%m-%d %H:%M"
+## 画面を垂直方向に分割する
+#set vertical-split = yes
 
-# refresh mode
-set refresh-mode = auto
+# 水平分割したウィンドウの下画面サイズを % で指定（行数指定も可）
+set split-view-height = 80%
 
-# show merge-diff
+# 差分の前後の表示行数（diff-context)を指定
+set diff-context = 6
+
+# merge diff を表示する
 set diff-options = -m --first-parent
 
-# reset soft
-bind main ^ ?git reset --soft HEAD^
+# リフレッシュするタイミング
+set refresh-mode = auto
+#set refresh-mode = after-command
 
-# vim like first/last line 
-bind generic g move-first-line
-bind generic G move-last-line
+# カラー設定
+# diff-view で境界が見やすくなるように変更
+color  diff-header       default magenta
+color  diff-chunk        black   white
 
-# reassign grep view
-bind generic <Ctrl-g> view-grep
+
+# g をファイル先頭に移動に変更、 view-grep を再割当て
+bind generic g      move-first-line
+bind generic E      view-grep
+
+# G でファイル末尾に移動 (default: :toggle commit-title-graph)
+bind generic G      move-last-line
+bind main    G      move-last-line
+
+## Alt-g で :toggle commit-title-graph
+#bind main    <Esc>g :toggle commit-title-graph
+
+# デフォルトで tig --all を実行する
+set main-options = --exclude=refs/stash --all
+
+
+
+# L で reflog
+bind generic L      !sh -c "git reflog --pretty=raw | tig --pretty=raw"
+
+# S で stash save
+bind generic S      ?git stash save "%(prompt Enter stash comment: )"
+
+# ctrl-c で commit ID をクリップボードにコピー
+bind generic Y      @bash -c "echo -n '%(commit)' | xsel --clipboard --input"
+
+# F で fetch (default: :toggle file-name / :toggle commit-title-refs)
+bind generic F      ?git fetch %(remote)
+bind main    F      ?git fetch %(remote)
+
+# ^ で reset --soft
+bind generic ^      ?git reset --soft HEAD^
+
+# . で HEAD との diff
+bind main    .      !sh -c "git diff %(commit) | tig"
+bind diff    .      !sh -c "git diff %(commit) | tig"
+bind refs    .      !sh -c "git diff %(branch) | tig"
+
+
+# commit verbose (diff をみながらメッセージ編集出来る)
+bind status C       !git commit -v
+
+# commit --amend
+bind main    +      !git commit --amend --allow-empty
+bind status  +      !git commit --amend --allow-empty
+
+
+# tree view checkout (ファイル取り込み)
+bind tree    C      ?git checkout %(commit) %(file)
+
+# checkout commit as a new branch
+bind main    B      ?git checkout -b "%(prompt Enter new branch name: )" %(commit)
+
+# no-verify (bypass pre-commit and prepare-commit-msg)
+bind status  N      !git commit -nv
 
 # tree view transfar
 bind tree l enter
 bind tree h parent
 
-# commit amend
-bind main + ?git commit --amend
