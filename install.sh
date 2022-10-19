@@ -15,10 +15,15 @@ for f in $(cat ${PWD}/install_list.txt); do
   fi
 done
 
-echo "make config files in home directory as symbolic links."
-for f in $(cat ${PWD}/install_list.txt); do
-  ln -s ${PWD}/${f} ${HOME}/.${f}
-done
+if [ -z $(ls -A ${HOME}/${DOTFILE_DIR}/${BACKUP_DIR}) ]; then
+  rm -rf ${HOME}/${DOTFILE_DIR}/${BACKUP_DIR}
+  echo "there is no files to backup."
+else
+  echo "make config files in home directory as symbolic links."
+  for f in $(cat ${PWD}/install_list.txt); do
+    ln -s ${PWD}/${f} ${HOME}/.${f}
+  done
+fi
 
 echo "finish installation."
 
