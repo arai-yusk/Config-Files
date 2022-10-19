@@ -4,8 +4,8 @@ DOTFILE_DIR=.dotfile
 BACKUP_DIR=backup_$(date '+%Y%m%d%H%M')
 
 echo "start installation."
-if ! [ -e ~/${DOTFILE_DIR}/${BACKUP_DIR} ]; then
-  mkdir -p ~/${DOTFILE_DIR}/${BACKUP_DIR}
+if ! [ -e ${HOME}/${DOTFILE_DIR}/${BACKUP_DIR} ]; then
+  mkdir -p ${HOME}/${DOTFILE_DIR}/${BACKUP_DIR}
 fi
 
 echo "move config files to ${DOTFILE_DIR} as backups."
