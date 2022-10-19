@@ -1,0 +1,5 @@
+bash_aliases
+bash_profile
+bashrc
+tigrc
+vimrc
